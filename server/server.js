@@ -2,7 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 var mongoose = require('./db/mongoose');
-var todo = require('./models/todo');
+var Todo = require('./models/todo');
 
 var app = express();
 
@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 //create routes
 app.post('/kory', (req, res)=>{
 
-var newTodo = new todo({
+var newTodo = new Todo({
 	name : req.body.name,
 	age : req.body.age
 })
