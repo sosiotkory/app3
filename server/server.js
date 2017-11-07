@@ -4,6 +4,7 @@ var bodyParser = require('body-parser');
 var {mongoose} = require('./db/mongoose');
 var {todo} = require('./models/todo');
 var {users} = require('./models/users');
+var {ObjectID} = require('mongodb');
 
 var app = express();
 
@@ -24,6 +25,26 @@ newTodo.save().then((docs)=>{
 }, (err)=>{
 	res.status(400).send(err)
 });
+})
+
+app.get('/kory/:id', (req, res)=>{
+	var id = req.params.id;
+
+	if(!ObjectID.isValid(id)){
+		return res.status(404).send();
+	}
+
+	todo.findById(id).then((docs)=>{
+		if(!todo){
+			return res.status(404).send();
+		}
+
+		res.send(docs);
+	}).
+	catch((e)=>{
+		res.status(400).send(e);
+	})
+
 })
 
 //listing resources
