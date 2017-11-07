@@ -7,6 +7,7 @@ var {users} = require('./models/users');
 var {ObjectID} = require('mongodb');
 
 var app = express();
+var port = process.env.PORT||3000;
 
 //register middleware to tackle the body request
 
@@ -83,8 +84,8 @@ app.get('/kory', (req, res)=>{
 
 
 
-app.listen(3000, ()=>{
-	console.log('App starting at port 3000');
+app.listen(port, ()=>{
+	console.log(`App starting at port ${port}`);
 })
 
 module.exports = {app};
