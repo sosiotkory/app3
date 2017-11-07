@@ -27,25 +27,42 @@ newTodo.save().then((docs)=>{
 });
 })
 
+
 app.get('/kory/:id', (req, res)=>{
 	var id = req.params.id;
 
 	if(!ObjectID.isValid(id)){
-		return res.status(404).send();
+		return res.send(404).send();
 	}
-
 	todo.findById(id).then((docs)=>{
 		if(!todo){
 			return res.status(404).send();
 		}
 
-		res.send(docs);
-	}).
-	catch((e)=>{
-		res.status(400).send(e);
+		res.send({docs});
+	}).catch((e)=>{
+		res.status(400).send();
 	})
-
 })
+// app.get('/kory/:id', (req, res)=>{
+// 	var id = req.params.id;
+
+// 	if(!ObjectID.isValid(id)){
+// 		return res.status(404).send();
+// 	}
+
+// 	todo.findById(id).then((docs)=>{
+// 		if(!todo){
+// 			return res.status(404).send();
+// 		}
+
+// 		res.send(docs);
+// 	}).
+// 	catch((e)=>{
+// 		res.status(400).send()
+// 	})
+
+// })
 
 //listing resources
 
