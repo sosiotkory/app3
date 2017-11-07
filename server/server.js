@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+const _ =require('lodash');
 
 var {mongoose} = require('./db/mongoose');
 var {todo} = require('./models/todo');
@@ -81,6 +82,41 @@ app.get('/kory', (req, res)=>{
 	res.send(err);;
 	})
 })
+
+app.delete('/kory/:id', (req, res)=>{
+var id = req.params.id;
+if(!ObjectID.isValid(id)){
+	return res.status(404).send();
+}
+
+todo.findByIdAndRemove(id).then((docs)=>{
+	if(!todo){
+		return res.status(404).send();
+	}
+	res.send({docs});
+}).catch((e)=>{
+	res.status(400).send();
+})
+})
+
+app.patch('/kory/:id', (req,res)=>{
+	var id = req.params.id;
+	var body = _.pick['name','age'];
+
+	if(!ObjectID.isValid(id)){
+	return res.status(404).send();
+}
+todo.findByIdAndUpdate(id, {$inc : {age: -7}}, {new : true}).then((docs)=>{
+
+	if(!todo){
+		return res.status(404).send();
+	}
+	res.send({docs});
+}).catch((e)=>{
+	res.status(400).send();
+})
+})
+
 
 
 

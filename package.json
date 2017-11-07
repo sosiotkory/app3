@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start" : "node server/server.js",
+    "start": "node server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "engines" : {
-  "node" : "8.6.0"
+  "engines": {
+    "node": "8.6.0"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +16,7 @@
     "body-parser": "^1.18.2",
     "expect": "^21.2.1",
     "express": "^4.16.2",
+    "lodash": "^4.17.4",
     "mocha": "^4.0.1",
     "mongodb": "^2.2.33",
     "mongoose": "^4.13.0",
