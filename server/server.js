@@ -14,9 +14,27 @@ var port = process.env.PORT||3000;
 
 app.use(bodyParser.json());
 // console.log(todo);
+//user model
 
+app.post('/use', (req,res)=>{
+	var body = _.pick(req.body, ['email', 'password']);
+
+	var User = new users(body);
+	User.save().then((docs)=>{
+		if(!users){
+			return res.status(404).send();
+		}
+		res.send(JSON.stringify(docs, undefined, 2));
+	}).catch((e)=>{
+		res.status(400).send();
+	})
+
+
+})
 //create routes
 app.post('/kory', (req, res)=>{
+
+
 
 var newTodo = new todo({
 	name : req.body.name,
