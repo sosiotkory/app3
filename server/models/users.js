@@ -50,7 +50,7 @@ userSchema.methods.toJSON = function(){
 	var user = this;
 	var userObject = user.toObject();
 
-	return _.pick(userObject, ['email', 'password']);
+	return _.pick(userObject, ['_id', 'email']);
 }
 
 userSchema.methods.generateAuthToken = function(){
@@ -88,6 +88,28 @@ userSchema.statics.findByToken= function(token){
 		'_id' : decoded._id,
 		'tokens.token' : token,
 		'tokens.access' : 'auth'
+	})
+}
+
+userSchema.statics.findByCredentials = function(email, password){
+
+	var users=this;
+
+	return users.findOne({email}).then((user)=>{
+		if(!user){
+			return Promise.reject();
+		}
+		return new Promise((resolve, reject)=>{
+
+			bcrypt.compare(password, user.password, (err, res)=>{
+				if(res){
+					resolve(user);
+				}else{
+					reject();
+				}
+
+			})
+		})
 	})
 }
 

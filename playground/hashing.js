@@ -5,15 +5,15 @@ const bcrypt = require('bcryptjs');
 
 var password = 'cherukory';
 
-bcrypt.genSalt(10,(err,salt)=>{
-	bcrypt.hash(password, salt, (err, hash)=>{
-	console.log(hash);
-	});
-});
+// bcrypt.genSalt(10,(err,salt)=>{
+// 	bcrypt.hash(password, salt, (err, hash)=>{
+// 	console.log(hash);
+// 	});
+// });
 
-var hashed = '$2a$10$tp8uTGvFQA/k0GYGxj0b5u0CjawYp0tt13CRq.dlWhqxQlNQceuAe';
+var hashed = '$2a$10$lmk2atWzYv4CCew2aJ/sXuRdenpn6t7FZhDEZvf2eXKGTkFGVBh8G';
 
-bcrypt.compare(hashed,password,(err,re)=>{
+bcrypt.compare(password,hashed,(err,re)=>{
 	console.log(re);
 })
 
