@@ -6,6 +6,7 @@ var {mongoose} = require('./db/mongoose');
 var {todo} = require('./models/todo');
 var {users} = require('./models/users');
 var {ObjectID} = require('mongodb');
+var {auth} = require('./../middleware/authenticate');
 
 var app = express();
 var port = process.env.PORT||3000;
@@ -13,18 +14,23 @@ var port = process.env.PORT||3000;
 //register middleware to tackle the body request
 
 app.use(bodyParser.json());
+
+app.use('/use', (req,res,next)=>{
+	console.log("I think i tried");
+
+	next();
+})
 // console.log(todo);
 //user model
 
 app.post('/use', (req,res)=>{
 	var body = _.pick(req.body, ['email', 'password']);
 
-	var User = new users(body);
-	User.save().then((docs)=>{
-		if(!users){
-			return res.status(404).send();
-		}
-		res.send(JSON.stringify(docs, undefined, 2));
+	var user = new users(body);
+	user.save().then(()=>{
+		return user.generateAuthToken();
+	}).then((token)=>{
+		res.header('x-auth', token).send(user);
 	}).catch((e)=>{
 		res.status(400).send();
 	})
@@ -136,6 +142,12 @@ todo.findByIdAndUpdate(id, {$inc : {age: -7}}, {new : true}).then((docs)=>{
 })
 
 
+
+app.get('/users/me', auth, (req,res)=>{
+
+	res.send(req.user);
+
+})
 
 
 app.listen(port, ()=>{

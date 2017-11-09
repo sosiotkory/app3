@@ -44,18 +44,51 @@ email : {
 // 	return _.pick(userObject, ['email', '_id']);	
 // }
 
-// userSchema.methods.generateAuthToken = function(){
+userSchema.methods.toJSON = function(){
 
-// 	var user = this;
-// 	var access = "auth";
-// 	var token = jwt.sign({_id:user._id.toHexString(),access},'qwerty').toString();
+	var user = this;
+	var userObject = user.toObject();
 
-// 	user.tokens.push({access, token});
+	return _.pick(userObject, ['email', 'password']);
+}
 
-// 	return user.save().then(()=>{
-// 		return token;
-// 	})
-// }
+userSchema.methods.generateAuthToken = function(){
+
+	var user = this;
+	var access = 'auth';
+	var token = jwt.sign({_id:user._id.toHexString(),access},'123456').toString();
+
+	user.tokens.push({access, token});
+
+	return user.save().then(()=>{
+		return token;
+	})
+}
+
+userSchema.statics.findByToken= function(token){
+
+	var users = this;
+	var decoded;
+
+	try{
+
+		decoded = jwt.verify(token, '123456');
+
+	}catch(err){
+		return new Promise((resolve, reject)=>{
+
+			reject();
+		})
+
+	}
+
+
+	return users.findOne({
+		'_id' : decoded._id,
+		'tokens.token' : token,
+		'tokens.access' : 'auth'
+	})
+}
 
 var users = mongoose.model('Users', userSchema);
 
